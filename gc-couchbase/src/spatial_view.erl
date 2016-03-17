@@ -522,7 +522,9 @@ design_doc_to_set_view_group(SetName, #doc{id = Id, body = {Fields}}) ->
         mod = ?MODULE,
         extension = index_extension()
     },
-    set_view_sig(SetViewGroup).
+    {ok, MapCtx} = mapreduce:start_map_context(
+        ?MODULE, [View#set_view.def || View <- SetViews]),
+    set_view_sig(SetViewGroup#set_view_group{map_context = MapCtx}).
 
 
 % Make sure the signature changes whenever the definitions of the spatial
